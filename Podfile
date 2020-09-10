@@ -2,6 +2,6 @@
 # platform :ios, '9.0'
 
 target 'CocktailDB' do
-    # Pods for CoctailDB
+    # Pods for Cocktail DB
     pod 'Alamofire', '~> 5.2'
 end

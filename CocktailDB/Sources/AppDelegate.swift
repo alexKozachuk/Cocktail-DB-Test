@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  CoctailDB
+//  Cocktail DB
 //
 //  Created by Sasha on 09/09/2020.
 //  Copyright © 2020 Sasha. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  AlamofireServise.swift
-//  CoctailDB
+//  Cocktail DB
 //
 //  Created by Sasha on 10/09/2020.
 //  Copyright © 2020 Sasha. All rights reserved.
@@ -28,14 +28,12 @@ class AlamofireServise {
         let request = AF.request(baseStringURL + "/filter.php?c=" + formatedCategory)
         let queue = DispatchQueue(label: "com.test.api", qos: .background, attributes: .concurrent)
         request.responseDecodable(of: DrinksJSON.self, queue: queue) { response in
-            //print(response)
-            guard let coctails = response.value else { return }
+            guard let cocktails = response.value else { return }
             var drinks: [Drink] = []
             
-            for coctail in coctails.drinks {
+            for coctail in cocktails.drinks {
                 var photoUrl = coctail.strDrinkThumb
                 photoUrl.appendPathComponent("preview", isDirectory: false)
-                //print(photoUrl)
                 guard let photoData = try? Data(contentsOf: photoUrl) else { return }
                 guard let photoImage = UIImage(data: photoData) else { return }
                 let drink = Drink(name: coctail.strDrink, image: photoImage)
