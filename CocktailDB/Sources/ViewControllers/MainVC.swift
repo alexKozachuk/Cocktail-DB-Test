@@ -8,9 +8,6 @@
 
 import UIKit
 
-
-
-
 class MainVC: UIViewController {
 
     // MARK: @IBOutlets
@@ -22,7 +19,6 @@ class MainVC: UIViewController {
     // MARK: Variables
     var filters: [Filter] = []
     var drinks: [[Drink]] = []
-    var iterator = 0
     
     // MARK: Servises
     let alamofireServise = AlamofireServise.shared
@@ -119,8 +115,6 @@ extension MainVC: UITableViewDataSource {
         return cell
     }
     
-    
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if downloader.isDownloaded {
@@ -144,7 +138,6 @@ extension MainVC: UITableViewDataSource {
             
         }
     }
-    
     
 }
 
