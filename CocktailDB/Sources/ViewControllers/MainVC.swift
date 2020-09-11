@@ -97,10 +97,25 @@ extension MainVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = drinks[indexPath.section][indexPath.row]
+        var item = drinks[indexPath.section][indexPath.row]
         let cell = tableView.dequeueReusableCell(with: CoctailTableViewCell.self, for: indexPath)
         cell.coctailNameLabel.text = item.name
-        cell.coctailImageView.image = item.image
+        
+        if let image = item.image {
+            cell.coctailImageView.image = image
+        } else {
+            cell.activityIndicator.startAnimating()
+            cell.activityIndicator.isHidden = false
+            alamofireServise.getImage(item.url) { image in
+                DispatchQueue.main.async {
+                    cell.coctailImageView.image = image
+                    cell.activityIndicator.stopAnimating()
+                    cell.activityIndicator.isHidden = true
+                }
+                item.image = image
+            }
+        }
+        
         return cell
     }
     

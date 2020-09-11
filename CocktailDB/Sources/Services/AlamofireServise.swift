@@ -6,7 +6,7 @@
 //  Copyright © 2020 Sasha. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Alamofire
 
 class AlamofireServise {
@@ -16,7 +16,9 @@ class AlamofireServise {
     
     func getListCategory(completionHandler: @escaping ([Filter]) -> Void) {
         let request = AF.request(baseStringURL + "/list.php?c=list")
-        request.responseDecodable(of: FiltersJSON.self) { response in
+        let queue = DispatchQueue(label: "com.Alexandr.CocktailDB", qos: .background, attributes: .concurrent)
+        
+        request.responseDecodable(of: FiltersJSON.self, queue: queue) { response in
             guard let filtersJSON = response.value else { return }
             let filters = filtersJSON.drinks.map { Filter(name: $0.strCategory) }
             completionHandler(filters)
@@ -26,21 +28,29 @@ class AlamofireServise {
     func getDrinks(_ category: String, completionHandler: @escaping ([Drink]) -> Void) {
         let formatedCategory = category.replacingOccurrences(of: " ", with: "_")
         let request = AF.request(baseStringURL + "/filter.php?c=" + formatedCategory)
-        let queue = DispatchQueue(label: "com.test.api", qos: .background, attributes: .concurrent)
+        let queue = DispatchQueue(label: "com.Alexandr.CocktailDB", qos: .background, attributes: .concurrent)
         request.responseDecodable(of: DrinksJSON.self, queue: queue) { response in
             guard let cocktails = response.value else { return }
             var drinks: [Drink] = []
-            
-            for coctail in cocktails.drinks {
-                var photoUrl = coctail.strDrinkThumb
-                photoUrl.appendPathComponent("preview", isDirectory: false)
-                guard let photoData = try? Data(contentsOf: photoUrl) else { return }
-                guard let photoImage = UIImage(data: photoData) else { return }
-                let drink = Drink(name: coctail.strDrink, image: photoImage)
+            for cocktail in cocktails.drinks {
+                let drink = Drink(name: cocktail.strDrink, url: cocktail.strDrinkThumb)
                 drinks.append(drink)
             }
             completionHandler(drinks)
         }
+    }
+    
+    func getImage(_ url: URL, completionHandler: @escaping (UIImage) -> Void){
+        let queue = DispatchQueue(label: "com.Alexandr.CocktailDB", qos: .background, attributes: .concurrent)
+        var photoUrl = url
+        photoUrl.appendPathComponent("preview", isDirectory: false)
+        queue.async {
+            guard let photoData = try? Data(contentsOf: photoUrl) else { return }
+            guard let photoImage = UIImage(data: photoData) else { return }
+            completionHandler(photoImage)
+        }
+        
+        
     }
     
     

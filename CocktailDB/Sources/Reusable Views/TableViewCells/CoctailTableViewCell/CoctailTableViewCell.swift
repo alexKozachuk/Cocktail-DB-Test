@@ -12,6 +12,7 @@ class CoctailTableViewCell: UITableViewCell {
 
     @IBOutlet weak var coctailImageView: UIImageView!
     @IBOutlet weak var coctailNameLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -10,5 +10,6 @@ import UIKit
 
 struct Drink {
     var name: String
-    var image: UIImage
+    var image: UIImage? = nil
+    var url: URL
 }
